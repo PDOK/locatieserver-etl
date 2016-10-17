@@ -118,18 +118,18 @@ SAMENSTELLING varchar(5 ),
 	ADRESOBJECTTYPEOMSCHRIJVING varchar(46 ), 
 	NUM_ID NUMERIC(16 ), 
 	NUM_INACTIEF CHAR(1 ), 
-	NUM_BEGDAT NUMERIC(16,0), 
+	NUM_BEGDAT DATE, 
 	TYPEADRESSEERBAAROBJECT varchar(20 ), 
 	ADO_ID NUMERIC(16 ), 
 	ADO_INACTIEF CHAR(1 ), 
-	ADO_BEGDAT numeric, 
+	ADO_BEGDAT DATE, 
 	ADO_STATUS varchar(80 ), 
 	OPR_ID NUMERIC(16 ), 
 	OPR_INACTIEF CHAR(1 ), 
-	OPR_BEGDAT numeric(16,0), 
+	OPR_BEGDAT DATE, 
 	WPL_ID numeric(4,0 ), 
 	WPL_INACTIEF CHAR(1 ), 
-	WPL_BEGDAT numeric(16,0), 
+	WPL_BEGDAT DATE, 
 	OPENBARERUIMTENAAM varchar(80 ), 
 	VERKORTEOPENBARERUIMTENAAM varchar(80 ), 
 	OPENBARERUIMTETYPE varchar(40 ), 
@@ -153,7 +153,7 @@ SAMENSTELLING varchar(5 ),
  CREATE TABLE GEMEENTE 
    (CODE NUMERIC(4,0), 
 	GEMEENTENAAM VARCHAR(80),
-	GEOM GEOMETRY (polygon, 28992) 
+	GEOM GEOMETRY (Multipolygon, 28992) 
    ) 
   ;
 
@@ -162,7 +162,7 @@ SAMENSTELLING varchar(5 ),
 --------------------------------------------------------
 CREATE TABLE PROVINCIE
    (PROVINCIENAAM VARCHAR(25),
-    GEOM GEOMETRY (polygon, 28992)
+    GEOM GEOMETRY (MultiPolygon, 28992)
    )
   ;
 
@@ -174,9 +174,9 @@ CREATE TABLE PROVINCIE
    (	ID NUMERIC(4,0), 
 	GEMEENTECODE NUMERIC(4,0 ), 
 	GEMEENTENAAM VARCHAR(40 ), 
-	NIEUWE_CODE VARCHAR(4 ), 
-	DATUMINGANG date, 
-	DATUMEINDE date, 
+	NIEUWE_CODE NUMERIC(4 ), 
+	DATUMINGANG varchar(8), 
+	DATUMEINDE varchar(8), 
 	MUTID_BEGIN NUMERIC, 
 	MUTID_WIJZIGING NUMERIC
    ) 
@@ -929,10 +929,10 @@ where st_contains(p.geom, st_centroid(g.geom))
        , datumeinde
     from gba_t33
    where (
-           datumingang < now() 
+           datumingang < to_char(now(), 'yyyymmdd') 
            OR datumingang IS NULL) 
          AND 
-           (datumeinde  > now() 
+           (datumeinde  > to_char(now(), 'yyyymmdd')
            OR datumeinde IS NULL)
          ;
 
