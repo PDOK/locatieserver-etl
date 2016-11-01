@@ -1,24 +1,89 @@
+-- provincie
+truncate table provincie;
+
 insert into provincie
-select "Provincienaam", geom from "Provincies_imp";
+select provincienaam, geovlak from bag.provincie;
+
+-- gemeente
+truncate table gemeente;
+
+insert into gemeente
+select gemeentecode as code,
+          gemeentenaam,
+          geovlak as geom 
+   from bag.gemeente ;
+
+--gba_t33?
+--Vullen van de gemeente tabel op basis van T33 en BAG gegevens van woonplaatsen
+/*insert into gemeente 
+select bgw.gemeentecode, 
+(select gemeentenaam from gba_t33
+where gemeentecode=bgw.gemeentecode and datumeinde is null 
+and (datumingang<to_char(now(), 'yyyymmdd') 
+or datumingang is null)) ,
+ST_Multi(ST_Union(bw.geovlak)) as geom
+--sdo_aggr_union(sdoaggrtype(bw.geovlak, 0.5)) geom
+from bag_gemeente_woonplaats bgw join bag_wpl_actueelbestaand bw on (bgw.woonplaatscode=bw.identificatie)
+where bgw.begindatumtijdvakgeldigheid < now()
+and (bgw.einddatumtijdvakgeldigheid is null
+or bgw.einddatumtijdvakgeldigheid  > now())
+and bgw.status = 'definitief' 
+group by gemeentecode
+*/
+
+--overige bag objecten
+truncate table bag_gemeente_woonplaats;
+insert into bag_gemeente_woonplaats select * from bag.gemeente_woonplaats;
+
+truncate table bag_verblijfsobject;
+insert into bag_verblijfsobject select * from bag.verblijfsobject;
+
+truncate table bag_woonplaats;
+insert into bag_woonplaats select * from bag.woonplaats;
+
+truncate table bag_vbopand;
+insert into bag_vbopand select * from bag.verblijfsobjectpand;
+
+truncate table bag_vbogebruiksdoel;
+insert into bag_vbogebruiksdoel select * from bag.verblijfsobjectgebruiksdoel;
+
+truncate table bag_standplaats;
+insert into bag_standplaats select * from bag.standplaats;
+
+truncate table bag_pand;
+insert into bag_pand select * from bag.pand;
+
+truncate table bag_openbareruimte;
+insert into bag_openbareruimte select * from bag.openbareruimte;
+
+truncate table bag_nummeraanduiding;
+insert into bag_nummeraanduiding select * from bag.nummeraanduiding;
+
+truncate table bag_ligplaats;
+insert into bag_ligplaats select * from bag.ligplaats;
+
+truncate table bag_adonevenadres;
+insert into bag_adonevenadres select * from bag.adresseerbaarobjectnevenadres;
 
 
+truncate table bag_adres;
    
 insert  /*+ APPEND */ into BAG_ADRES
-select 'vowh' samenstelling ,
- 'hoofdadres verblijfsobject in woonplaats' adresobjecttypeomschrijving ,
+select 'vowh'::varchar(5) samenstelling ,
+ 'hoofdadres verblijfsobject in woonplaats'::varchar(46) adresobjecttypeomschrijving ,
  a.identificatie num_id ,
- a.aanduidingrecordinactief::varchar(1) num_inactief ,
+ a.aanduidingrecordinactief num_inactief ,
  a.begindatumtijdvakgeldigheid num_begdat ,
  a.typeadresseerbaarobject ,
  b.identificatie ado_id ,
- b.aanduidingrecordinactief::varchar(1) ado_inactief,
+ b.aanduidingrecordinactief ado_inactief,
  b.begindatumtijdvakgeldigheid ado_begdat ,
  b.verblijfsobjectstatus ado_status ,
  opr.identificatie opr_id ,
- opr.aanduidingrecordinactief::varchar(1) opr_inactief ,
+ opr.aanduidingrecordinactief opr_inactief ,
  opr.begindatumtijdvakgeldigheid opr_begdat ,
  wpl.identificatie wpl_id ,
- wpl.aanduidingrecordinactief::varchar(1) wpl_inactief ,
+ wpl.aanduidingrecordinactief wpl_inactief ,
  wpl.begindatumtijdvakgeldigheid wpl_begdat ,
  opr.openbareruimtenaam ,
  CASE WHEN LENGTH(opr.openbareruimtenaam) <= 25 THEN opr.openbareruimtenaam
@@ -43,8 +108,8 @@ where a.typeadresseerbaarobject = 'Verblijfsobject' and a.gerelateerdewoonplaats
 
 --2e
 insert /*+ APPEND */ into BAG_ADRES
-select 'v wh' adresobjecttype,
- 'hoofdadres verblijfsobject buiten woonplaats' adresobjecttypeomschrijving,
+select 'v wh'::varchar(5) adresobjecttype,
+ 'hoofdadres verblijfsobject buiten woonplaats'::varchar(46) adresobjecttypeomschrijving,
  a.identificatie num_id,
  a.aanduidingrecordinactief num_inactief,
  a.begindatumtijdvakgeldigheid num_begdat,
@@ -168,18 +233,18 @@ insert /*+ APPEND */ into BAG_ADRES
 select 'lowh' adresobjecttype,
  'hoofdadres ligplaats in woonplaats' adresobjecttypeomschrijving,
  a.identificatie num_id,
- a.aanduidingrecordinactief::varchar(1) num_inactief,
+ a.aanduidingrecordinactief num_inactief,
  a.begindatumtijdvakgeldigheid num_begdat,
  a.typeadresseerbaarobject,
  b.identificatie ado_id,
- b.aanduidingrecordinactief::varchar(1) ado_inactief,
+ b.aanduidingrecordinactief ado_inactief,
  b.begindatumtijdvakgeldigheid ado_begdat,
  b.ligplaatsstatus ado_status,
  opr.identificatie opr_id,
- opr.aanduidingrecordinactief::varchar(1) opr_inactief,
+ opr.aanduidingrecordinactief opr_inactief,
  opr.begindatumtijdvakgeldigheid opr_begdat ,
  wpl.identificatie wpl_id,
- wpl.aanduidingrecordinactief::varchar(1) wpl_inactief,
+ wpl.aanduidingrecordinactief wpl_inactief,
  wpl.begindatumtijdvakgeldigheid wpl_begdat ,
  opr.openbareruimtenaam ,
  CASE WHEN LENGTH(opr.openbareruimtenaam) <= 25 THEN opr.openbareruimtenaam
@@ -486,27 +551,16 @@ select 's wn' adresobjecttype,
  where a.typeadresseerbaarobject = 'Standplaats' and a.gerelateerdewoonplaats is not null 
 ;
 
---Vullen van de gemeente tabel op basis van T33 en BAG gegevens van woonplaatsen
-insert into gemeente 
-select bgw.gemeentecode, 
-(select gemeentenaam from gba_t33
-where gemeentecode=bgw.gemeentecode and datumeinde is null 
-and (datumingang<to_char(now(), 'yyyymmdd') 
-or datumingang is null)) ,
-ST_Multi(ST_Union(bw.geovlak)) as geom
---sdo_aggr_union(sdoaggrtype(bw.geovlak, 0.5)) geom
-from bag_gemeente_woonplaats bgw join bag_wpl_actueelbestaand bw on (bgw.woonplaatscode=bw.identificatie)
-where bgw.begindatumtijdvakgeldigheid < now()
-and (bgw.einddatumtijdvakgeldigheid is null
-or bgw.einddatumtijdvakgeldigheid  > now())
-and bgw.status = 'definitief' 
-group by gemeentecode
+
 
 
 
 --refreshen van MV's
+--BAG_MV_ADRES  
+REFRESH MATERIALIZED VIEW BAG_MV_ADRES;
+
+REFRESH MATERIALIZED VIEW BAG_POSTCODES;
 
 
-BAG_MV_ADRES
 
 

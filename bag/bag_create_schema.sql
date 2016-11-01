@@ -1,9 +1,9 @@
 ﻿-- eerst alles droppen
-drop schema bag cascade;
-drop role bag;
+drop schema locatieserver cascade;
+drop role pdok_locatieserver_owner;
 -- opnieuw aanmaken
-create role bag;
-create schema BAG authorization bag;
+create role pdok_locatieserver_owner;
+create schema locatieserver;
 
 
 

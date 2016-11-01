@@ -1,29 +1,22 @@
-grant select on bag.bag_adressen to ggs_view_role;
+grant select on locatieserver.bag_adressen to pdok_locatieserver_owner;
 
-create or replace synonym ggs_view.bag_adressen for bag.bag_adressen;
+grant select on locatieserver.bag_panden to pdok_locatieserver_owner;
 
-grant select on bag.bag_panden to ggs_view_role;
+grant select on locatieserver.bag_woonplaatsen to pdok_locatieserver_owner;
 
-create or replace synonym ggs_view.bag_panden for bag.bag_panden;
+grant select on locatieserver.bag_gemeenten to pdok_locatieserver_owner;
 
-grant select on bag.bag_woonplaatsen to ggs_view_role;
+grant select on locatieserver.bag_pand_bij_adres to pdok_locatieserver_owner;
 
-create or replace synonym ggs_view.bag_woonplaatsen for bag.bag_woonplaatsen;
+grant select on locatieserver.bag_postcodes to pdok_locatieserver_owner;
 
-grant select on bag.bag_gemeenten to ggs_view_role;
+/*
+grant execute on street_abv to pdok_locatieserver_owner;
 
-create or replace synonym ggs_view.bag_gemeenten for bag.bag_gemeenten;
+create or replace synonym pdok_locatieserver_owner.street_abv for locatieserver.street_abv;
 
-grant select on bag.bag_pand_bij_adres to ggs_view_role;
+grant execute on sdo_wkt to pdok_locatieserver_owner;
 
-create or replace synonym ggs_view.bag_pand_bij_adres for bag.bag_pand_bij_adres;
+create or replace synonym pdok_locatieserver_owner.sdo_wkt for locatieserver.sdo_wkt;
 
-grant execute on street_abv to ggs_view_role;
-
-create or replace synonym ggs_view.street_abv for bag.street_abv;
-
-grant execute on sdo_wkt to ggs_view_role;
-
-create or replace synonym ggs_view.sdo_wkt for bag.sdo_wkt;
-
-grant insert, update, delete, select on refresh to bag_stage;
+*/
