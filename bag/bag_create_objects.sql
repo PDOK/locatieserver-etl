@@ -1,4 +1,4 @@
-﻿set search_path to locatieserver, bag, public;
+﻿set search_path to locatieserver, public;
 
 
 --------------------------------------------------------
@@ -871,68 +871,68 @@ AS select pab.identificatie,
 --  DDL for View SUFFIX_AFKORTINGEN
 --------------------------------------------------------
 
- CREATE TABLE BAG.SUFFIX_AFK  (	ID numeric, 
+ CREATE TABLE SUFFIX_AFK  (	ID numeric, 
 	SUFFIX_VOLLEDIG varchar(64 ), 
 	SUFFIX_AFKORTING varchar(32 ) ) ;
 
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('1','straat$','str');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('2','weg$','wg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('3','pad$','pd');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('4','park$','prk');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('5','dijk$','dk');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('6','bungalowpark$','bglwprk');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('7','boulevard$','blvd');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('8','dreef$','dr');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('9','drift$','dr');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('10','dwarsstraat$','dwstr');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('11','dwarsweg$','dwwg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('12','gracht$','gr');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('13','haven$','hvn');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('14','kade$','kd');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('15','kanaal$','kan');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('16','laan$','ln');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('17','laantje$','ln');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('18','leane$','ln');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('19','loane$','ln');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('20','plaats$','plts');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('21','plantsoen$','plnts');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('22','plein$','pln');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('23','polder$','pldr');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('24','polderdijk$','pldrdk');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('25','polderweg$','pldrwg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('26','singel$','sngl');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('27','steech$','stg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('28','steeg$','stg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('29','straatje$','str');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('30','straatweg$','strwg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('31','strjitte$','str');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('32','voetpad$','vtpd');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('1','straat$','str');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('2','weg$','wg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('3','pad$','pd');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('4','park$','prk');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('5','dijk$','dk');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('6','bungalowpark$','bglwprk');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('7','boulevard$','blvd');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('8','dreef$','dr');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('9','drift$','dr');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('10','dwarsstraat$','dwstr');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('11','dwarsweg$','dwwg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('12','gracht$','gr');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('13','haven$','hvn');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('14','kade$','kd');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('15','kanaal$','kan');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('16','laan$','ln');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('17','laantje$','ln');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('18','leane$','ln');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('19','loane$','ln');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('20','plaats$','plts');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('21','plantsoen$','plnts');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('22','plein$','pln');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('23','polder$','pldr');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('24','polderdijk$','pldrdk');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('25','polderweg$','pldrwg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('26','singel$','sngl');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('27','steech$','stg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('28','steeg$','stg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('29','straatje$','str');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('30','straatweg$','strwg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('31','strjitte$','str');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('32','voetpad$','vtpd');
 
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('101','str$','straat');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('102','wg$','weg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('103','pd$','pad');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('104','prk$','park');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('105','dk$','dijk');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('106','bglwprk$','bungalowpark');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('107','blvd$','boulevard');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('108','dr$','dreef');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('110','dwstr$','dwarsstraat');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('111','dwwg$','dwarsweg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('112','gr$','gracht');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('113','hvn$','haven');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('114','kd$','kade');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('115','kan$','kanaal');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('116','ln$','laan');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('120','plts$','plaats');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('121','plnts$','plantsoen');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('122','pln$','plein');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('123','pldr$','polder');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('124','pldrdk$','polderdijk');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('125','pldrwg$','polderweg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('126','sngl$','singel');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('128','stg$','steeg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('130','strwg$','straatweg');
-Insert into BAG.SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('132','vtpd$','voetpad');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('101','str$','straat');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('102','wg$','weg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('103','pd$','pad');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('104','prk$','park');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('105','dk$','dijk');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('106','bglwprk$','bungalowpark');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('107','blvd$','boulevard');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('108','dr$','dreef');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('110','dwstr$','dwarsstraat');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('111','dwwg$','dwarsweg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('112','gr$','gracht');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('113','hvn$','haven');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('114','kd$','kade');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('115','kan$','kanaal');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('116','ln$','laan');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('120','plts$','plaats');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('121','plnts$','plantsoen');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('122','pln$','plein');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('123','pldr$','polder');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('124','pldrdk$','polderdijk');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('125','pldrwg$','polderweg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('126','sngl$','singel');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('128','stg$','steeg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('130','strwg$','straatweg');
+Insert into SUFFIX_AFK (ID,SUFFIX_VOLLEDIG,SUFFIX_AFKORTING) values ('132','vtpd$','voetpad');
 
 
 
