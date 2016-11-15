@@ -47,6 +47,7 @@ drop table if exists GBA_T33_ALIAS ;
 drop table if exists GBA_T33;
 drop table if exists SUFFIX_AFK;
 drop table if exists GEMEENTE;
+--wsl drop table if exists GEMEENTE_WOONPLAATS;
 drop table if exists PROVINCIE;
 drop table if exists BAG_ADRES;
 drop table if exists BAG_WOONPLAATS_ALIAS;
@@ -69,6 +70,117 @@ drop table if exists BAG_VERBLIJFSOBJECT;
 drop table if exists BAG_GEMEENTE_WOONPLAATS;
 
 -- niet nodig vanwege de cascade bij bag_woonplaatsen: drop materialized view if exists BAG_MV_ADRES;
+drop type gebruiksdoelverblijfsobject;
+drop type gemeentewoonplaatsstatus;
+drop type ligplaatsstatus;
+drop type nummeraanduidingstatus;
+drop type openbareruimtestatus;
+drop type openbareruimtetype;
+drop type pandstatus;
+drop type postcode;
+drop type standplaatsstatus;
+drop type typeadresseerbaarobject;
+drop type verblijfsobjectstatus;
+drop type woonplaatsstatus;
+-- types
+CREATE TYPE gebruiksdoelverblijfsobject AS ENUM
+    ('woonfunctie', 'bijeenkomstfunctie', 'celfunctie', 
+	 'gezondheidszorgfunctie', 'industriefunctie', 'kantoorfunctie', 
+	 'logiesfunctie', 'onderwijsfunctie', 'sportfunctie', 
+	 'winkelfunctie', 'overige gebruiksfunctie');
+
+	
+	
+-- Type: gemeentewoonplaatsstatus
+
+-- DROP TYPE gemeentewoonplaatsstatus;
+
+CREATE TYPE gemeentewoonplaatsstatus AS ENUM
+    ('voorlopig', 'definitief');
+
+
+	
+-- Type: ligplaatsstatus
+
+-- DROP TYPE ligplaatsstatus;
+
+CREATE TYPE ligplaatsstatus AS ENUM
+    ('Plaats aangewezen', 'Plaats ingetrokken');
+
+
+-- Type: nummeraanduidingstatus
+
+-- DROP TYPE nummeraanduidingstatus;
+
+CREATE TYPE nummeraanduidingstatus AS ENUM
+    ('Naamgeving uitgegeven', 'Naamgeving ingetrokken');
+
+
+-- Type: openbareruimtestatus
+
+-- DROP TYPE openbareruimtestatus;
+
+CREATE TYPE openbareruimtestatus AS ENUM
+    ('Naamgeving uitgegeven', 'Naamgeving ingetrokken');
+
+
+-- Type: openbareruimtetype
+
+-- DROP TYPE openbareruimtetype;
+
+CREATE TYPE openbareruimtetype AS ENUM
+    ('Weg', 'Water', 'Spoorbaan', 'Terrein', 'Kunstwerk', 'Landschappelijk gebied', 'Administratief gebied');
+
+
+-- Type: pandstatus
+
+-- DROP TYPE pandstatus;
+
+CREATE TYPE pandstatus AS ENUM
+    ('Bouwvergunning verleend', 'Niet gerealiseerd pand', 'Bouw gestart', 'Pand in gebruik (niet ingemeten)', 'Pand in gebruik', 'Sloopvergunning verleend', 'Pand gesloopt', 'Pand buiten gebruik');
+
+-- Type: postcode
+
+-- DROP TYPE postcode;
+
+CREATE TYPE postcode AS
+(
+	numerieke integer,
+	alfanumerieke character varying(2)
+);
+
+-- Type: standplaatsstatus
+
+-- DROP TYPE standplaatsstatus;
+
+CREATE TYPE standplaatsstatus AS ENUM
+    ('Plaats aangewezen', 'Plaats ingetrokken');
+
+
+-- Type: typeadresseerbaarobject
+
+-- DROP TYPE typeadresseerbaarobject;
+
+CREATE TYPE typeadresseerbaarobject AS ENUM
+    ('Verblijfsobject', 'Standplaats', 'Ligplaats');
+
+
+-- Type: verblijfsobjectstatus
+
+-- DROP TYPE verblijfsobjectstatus;
+
+CREATE TYPE verblijfsobjectstatus AS ENUM
+    ('Verblijfsobject gevormd', 'Niet gerealiseerd verblijfsobject', 'Verblijfsobject in gebruik (niet ingemeten)', 'Verblijfsobject in gebruik', 'Verblijfsobject ingetrokken', 'Verblijfsobject buiten gebruik');
+
+
+-- Type: woonplaatsstatus
+
+-- DROP TYPE woonplaatsstatus;
+
+CREATE TYPE woonplaatsstatus AS ENUM
+    ('Woonplaats aangewezen', 'Woonplaats ingetrokken');
+
+
 
 
 -------------------------------------------------------
@@ -81,38 +193,252 @@ as select * from bag.adresseerbaarobjectnevenadres where 1=2;
 --------------------------------------------------------
 --  DDL for MV BAG_LIGPLAATS
 --------------------------------------------------------
-create table bag_ligplaats 
-as select * from bag.ligplaats where 1=2; --actueelbestaand;
+--create table bag_ligplaats 
+--as select * from bag.ligplaats where 1=2; --actueelbestaand;
+
+-- Table: ligplaats
+
+-- DROP TABLE bag_ligplaats;
+
+CREATE TABLE bag_ligplaats
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    officieel boolean,
+    inonderzoek boolean,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    documentnummer character varying(20) COLLATE pg_catalog."default",
+    documentdatum timestamp without time zone,
+    hoofdadres numeric(16),
+    ligplaatsstatus "ligplaatsstatus",
+    actualiteitsdatum timestamp without time zone,
+    geom_valid boolean,
+    geovlak geometry(multipolygon, 28992),
+    CONSTRAINT ligplaats_pkey PRIMARY KEY (gid)
+)
+;
+
+-- Index: ligplaats_geovlak_sidx
+
+-- DROP INDEX ligplaats_geovlak_sidx;
+
+CREATE INDEX ligplaats_geovlak_sidx
+    ON bag_ligplaats USING gist
+    (geovlak)
+    ;
+
+-- Index: ligplaats_key
+
+-- DROP INDEX ligplaats_key;
+
+CREATE INDEX ligplaats_key
+    ON bag_ligplaats USING btree
+    (begindatumtijdvakgeldigheid, aanduidingrecordcorrectie, aanduidingrecordinactief, identificatie)
+    ;
 
 --------------------------------------------------------
 --  DDL for Table BAG_NUMMERAANDUIDING
 --------------------------------------------------------
-create table bag_nummeraanduiding
-as select * from bag.nummeraanduiding where 1=2; --actueelbestaand;
+--create table bag_nummeraanduiding
+--as select * from bag.nummeraanduiding where 1=2; --actueelbestaand;
+-- Table: nummeraanduiding
 
+-- DROP TABLE bag_nummeraanduiding;
+
+CREATE TABLE bag_nummeraanduiding
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    officieel boolean,
+    inonderzoek boolean,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    documentnummer character varying(20) COLLATE pg_catalog."default",
+    documentdatum timestamp without time zone,
+    huisnummer numeric(5),
+    huisletter character varying(1) COLLATE pg_catalog."default",
+    huisnummertoevoeging character varying(4) COLLATE pg_catalog."default",
+    postcode character varying(6) COLLATE pg_catalog."default",
+    nummeraanduidingstatus "nummeraanduidingstatus",
+    typeadresseerbaarobject "typeadresseerbaarobject",
+    gerelateerdeopenbareruimte numeric(16),
+    gerelateerdewoonplaats numeric(16),
+    actualiteitsdatum timestamp without time zone,
+    CONSTRAINT nummeraanduiding_pkey PRIMARY KEY (gid)
+)
+;
+
+
+-- Index: nummeraanduiding_key
+
+-- DROP INDEX nummeraanduiding_key;
+
+CREATE INDEX nummeraanduiding_key
+    ON bag_nummeraanduiding USING btree
+    (begindatumtijdvakgeldigheid, aanduidingrecordcorrectie, aanduidingrecordinactief, identificatie)
+    ;
+
+-- Index: nummeraanduiding_postcode
+
+-- DROP INDEX nummeraanduiding_postcode;
+
+CREATE INDEX nummeraanduiding_postcode
+    ON bag_nummeraanduiding USING btree
+    (postcode COLLATE pg_catalog."default")
+    ;
+	
 --------------------------------------------------------
 --  DDL for Table BAG_OPENBARERUIMTE
 --------------------------------------------------------
-create table bag_openbareruimte
-as select * from bag.openbareruimte where 1=2; --actueelbestaand;
+--create table bag_openbareruimte
+--as select * from bag.openbareruimte where 1=2; --actueelbestaand;
+
+-- Table: openbareruimte
+
+-- DROP TABLE bag_openbareruimte;
+
+CREATE TABLE bag_openbareruimte
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    officieel boolean,
+    inonderzoek boolean,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    documentnummer character varying(20) COLLATE pg_catalog."default",
+    documentdatum timestamp without time zone,
+    openbareruimtenaam character varying(80) COLLATE pg_catalog."default",
+    openbareruimtestatus "openbareruimtestatus",
+    openbareruimtetype "openbareruimtetype",
+    gerelateerdewoonplaats numeric(16),
+    verkorteopenbareruimtenaam character varying(80) COLLATE pg_catalog."default",
+    actualiteitsdatum timestamp without time zone,
+    CONSTRAINT openbareruimte_pkey PRIMARY KEY (gid)
+)
+;
+
+
+-- Index: openbareruimte_key
+
+-- DROP INDEX openbareruimte_key;
+
+CREATE INDEX openbareruimte_key
+    ON bag_openbareruimte USING btree
+    (begindatumtijdvakgeldigheid, aanduidingrecordcorrectie, aanduidingrecordinactief, identificatie)
+    ;
+
+-- Index: openbareruimte_naam
+
+-- DROP INDEX openbareruimte_naam;
+
+CREATE INDEX openbareruimte_naam
+    ON bag_openbareruimte USING btree
+    (openbareruimtenaam COLLATE pg_catalog."default")
+    ;
+
 
 --------------------------------------------------------
 --  DDL for Table BAG_PAND
 --------------------------------------------------------
-create table bag_pand
-as select * from bag.pand where 1=2; --actueelbestaand;
+--create table bag_pand
+--as select * from bag.pand where 1=2; --actueelbestaand;
+
+-- Table: pand
+
+-- DROP TABLE bag_pand;
+
+CREATE TABLE bag_pand
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    officieel boolean,
+    inonderzoek boolean,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    documentnummer character varying(20) COLLATE pg_catalog."default",
+    documentdatum timestamp without time zone,
+    pandstatus "pandstatus",
+    bouwjaar numeric(4),
+    geom_valid boolean,
+    actualiteitsdatum timestamp without time zone,
+    geovlak geometry(polygonZ, 28992),
+    CONSTRAINT pand_pkey PRIMARY KEY (gid)
+);
+
+
+-- Index: pand_geovlak_sidx
+
+-- DROP INDEX pand_geovlak_sidx;
+
+CREATE INDEX pand_geovlak_sidx
+    ON bag_pand USING gist
+    (geovlak)
+    ;
 
 --------------------------------------------------------
 --  DDL for Table BAG_STANDPLAATS
 --------------------------------------------------------
-create table bag_standplaats
-as select * from bag.standplaats where 1=2; --actueelbestaand;
+--create table bag_standplaats
+--as select * from bag.standplaats where 1=2; --actueelbestaand;
+
+-- Table: standplaats
+
+-- DROP TABLE bag_standplaats;
+
+CREATE TABLE bag_standplaats
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    officieel boolean,
+    inonderzoek boolean,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    documentnummer character varying(20) COLLATE pg_catalog."default",
+    documentdatum timestamp without time zone,
+    hoofdadres numeric(16),
+    standplaatsstatus "standplaatsstatus",
+    actualiteitsdatum timestamp without time zone,
+    geom_valid boolean,
+    geovlak geometry(polygonZ, 28992),
+    CONSTRAINT standplaats_pkey PRIMARY KEY (gid)
+)
+;
 
 --------------------------------------------------------
 --  DDL for Table BAG_VBOGEBRUIKSDOEL
 --------------------------------------------------------
-create table bag_vbogebruiksdoel
-as select * from bag.verblijfsobjectgebruiksdoel where 1=2;  --actueelbestaand;
+--create table bag_vbogebruiksdoel
+--as select * from bag.verblijfsobjectgebruiksdoel where 1=2;  --actueelbestaand;
+
+-- Table: verblijfsobjectgebruiksdoel
+
+-- DROP TABLE verblijfsobjectgebruiksdoel;
+
+CREATE TABLE bag_vbogebruiksdoel
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    actualiteitsdatum timestamp without time zone,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    gebruiksdoelverblijfsobject "gebruiksdoelverblijfsobject",
+    CONSTRAINT verblijfsobjectgebruiksdoel_pkey PRIMARY KEY (gid)
+)
+;
+
 
 --------------------------------------------------------
 --  DDL for Table BAG_VBOPAND
@@ -123,8 +449,35 @@ as select * from bag.verblijfsobjectpand where 1=2;  --actueelbestaand;
 --------------------------------------------------------
 --  DDL for Table BAG_WOONPLAATS
 --------------------------------------------------------
-create table bag_woonplaats
-as select * from bag.woonplaats where 1=2; --actueelbestaand;
+--create table bag_woonplaats
+--as select * from bag.woonplaats where 1=2; --actueelbestaand;
+
+-- Table: woonplaats
+
+-- DROP TABLE bag_woonplaats;
+
+CREATE TABLE bag_woonplaats
+(
+    gid integer NOT NULL ,
+    identificatie numeric(16),
+    aanduidingrecordinactief boolean,
+    aanduidingrecordcorrectie integer,
+    officieel boolean,
+    inonderzoek boolean,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    documentnummer character varying(20) COLLATE pg_catalog."default",
+    documentdatum timestamp without time zone,
+    woonplaatsnaam character varying(80) COLLATE pg_catalog."default",
+    woonplaatsstatus "woonplaatsstatus",
+    actualiteitsdatum timestamp without time zone,
+    geom_valid boolean,
+    geovlak geometry(multipolygon, 28992),
+    CONSTRAINT woonplaats_pkey PRIMARY KEY (gid)
+)
+;
+
+
 
 --------------------------------------------------------
 --  DDL for Table BAG_VERBLIJFSOBJECT
@@ -135,8 +488,35 @@ as select * from bag.verblijfsobject where 1=2; --actueelbestaand;
 --------------------------------------------------------
 --  DDL for BAG_GEMEENTE_WOONPLAATS
 --------------------------------------------------------
-create table bag_gemeente_woonplaats 
-as select * from bag.gemeente_woonplaats where 1=2; --actueelbestaand;
+--create table bag_gemeente_woonplaats 
+--as select * from bag.gemeente_woonplaats where 1=2; --actueelbestaand;
+
+
+-- Table: bag_gemeente_woonplaats
+
+-- DROP TABLE bag_gemeente_woonplaats;
+
+CREATE TABLE bag_gemeente_woonplaats
+(
+    gid integer NOT NULL ,
+    begindatumtijdvakgeldigheid timestamp without time zone,
+    einddatumtijdvakgeldigheid timestamp without time zone,
+    woonplaatscode numeric(4),
+    gemeentecode numeric(4),
+    status "gemeentewoonplaatsstatus",
+    CONSTRAINT gemeente_woonplaats_pkey PRIMARY KEY (gid)
+);
+
+
+-- Index: gem_wpl_woonplaatscode_idx
+
+-- DROP INDEX gem_wpl_woonplaatscode_idx;
+
+CREATE INDEX gem_wpl_woonplaatscode_idx
+    ON bag_gemeente_woonplaats USING btree
+    (woonplaatscode)
+    ;
+
 
 --------------------------------------------------------
 --  DDL for PROVINCIE
@@ -775,7 +1155,7 @@ gw.provinciecode,
 gw.provincieafkorting,
 a.alias woonplaatsaliassen,
 'BAG'::varchar(10) bron,
-w.geovlak geometrie_rd
+w.geovlak geometrie_rd 
 from bag_wpl_actueelbestaand w join bag_gem_wpl_act_bst gw  on (w.identificatie=gw.woonplaatscode)   left outer join bag_woonplaats_alias a on (gw.woonplaatscode = a.identificatie);
 
 
@@ -784,8 +1164,8 @@ from bag_wpl_actueelbestaand w join bag_gem_wpl_act_bst gw  on (w.identificatie=
 --  DDL for MV BAG_MV_ADRES
 --------------------------------------------------------
 
-create materialized view bag_mv_adres
-as select --gid row_id,
+create materialized view bag_mv_adres 
+as select 
  a.ado_id||'-'||a.num_id identificatie,
  a.ado_id adresseerbaarobject_id,
  a.typeadresseerbaarobject,
@@ -810,19 +1190,19 @@ as select --gid row_id,
  g.provinciecode,
  g.provincieafkorting,
  'BAG'::varchar(5) bron,
- a.geopunt  geometrie_rd
+ a.geopunt  geometrie_rd 
 from bag_adres a join bag_woonplaatsen g on (a.wpl_id=g.identificatie and a.gemeentecode=g.gemeentecode)
 ;
 -- actueelbestaand;
 
--- de table BAG_ADRES wordt gevuld in locatieserver
+-- de table BAG_ADRES wordt gevuld in locatieserver etl
 -- 
 
 --------------------------------------------------------
 --  DDL for View BAG_ADRESSEN
 --------------------------------------------------------
 
-CREATE OR REPLACE VIEW BAG_ADRESSEN as
+CREATE OR REPLACE VIEW BAG_ADRESSEN as 
 select a.identificatie,
  a.adresseerbaarobject_id,
  a.nummeraanduiding_id,
@@ -846,7 +1226,7 @@ select a.identificatie,
  a.provinciecode,
  a.provincieafkorting,
  a.bron,
- a.geometrie_rd
+ a.geometrie_rd 
 from bag_mv_adres a;
 
 --------------------------------------------------------
@@ -1312,15 +1692,30 @@ comment on table PROVINCIE is 'Provincies, wordt gevuld vanuit pdok.provincies d
 --  DDL for BAG_POSTCODES
 --------------------------------------------------------
 
-create materialized view BAG_POSTCODES
-as
-select postcode, 
-woonplaatscode, woonplaatsnaam, 
-gemeentenaam, gemeentecode, 
-provincienaam, provinciecode, provincieafkorting, 
-st_centroid(st_collect(geometrie_rd)) geometrie_rd
-from bag_mv_adres
-group by postcode, woonplaatsnaam, woonplaatscode, gemeentenaam, gemeentecode, provincienaam, provinciecode, provincieafkorting;
+create materialized view BAG_POSTCODES 
+as 
+select 
+openbareruimte_id as identificatie,
+openbareruimte_id,
+openbareruimtetype,
+straatnaam,
+straatnaam_verkort,
+postcode,
+postcodenummer,
+postcodeletter,
+woonplaatscode, 
+woonplaatsnaam, 
+gemeentecode, 
+gemeentenaam, 
+provincienaam, 
+provinciecode, 
+provincieafkorting, 
+straatnaam || ', ' ||coalesce(nullif(postcode || ' ', ' '), '') || woonplaatsnaam     as weergavenaam,
+'postcode'::varchar as type,
+'BAG'::varchar as bron,
+st_centroid(st_collect(geometrie_rd)) geometrie_rd 
+from bag_mv_adres 
+group by openbareruimte_id, openbareruimtetype, straatnaam, straatnaam_verkort, postcode, postcodenummer, postcodeletter, woonplaatsnaam, woonplaatscode, gemeentenaam, gemeentecode, provincienaam, provinciecode, provincieafkorting;
 
 CREATE INDEX BAG_POSTCODES_SPIDX on BAG_POSTCODES   USING GIST (GEOMETRIE_RD) ; 
 
