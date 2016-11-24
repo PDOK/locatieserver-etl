@@ -70,6 +70,7 @@ drop table if exists BAG_VERBLIJFSOBJECT;
 drop table if exists BAG_GEMEENTE_WOONPLAATS;
 
 -- niet nodig vanwege de cascade bij bag_woonplaatsen: drop materialized view if exists BAG_MV_ADRES;
+-- geldt ook voor MV BAG_POSTCODES en BAG_OPENBARERUIMTES
 drop type gebruiksdoelverblijfsobject;
 drop type gemeentewoonplaatsstatus;
 drop type ligplaatsstatus;
@@ -1695,7 +1696,7 @@ comment on table PROVINCIE is 'Provincies, wordt gevuld vanuit pdok.provincies d
 create materialized view BAG_POSTCODES 
 as 
 select 
-openbareruimte_id as identificatie,
+openbareruimte_id||'_'||postcode as identificatie,
 openbareruimte_id,
 openbareruimtetype,
 straatnaam,
@@ -1720,12 +1721,48 @@ group by openbareruimte_id, openbareruimtetype, straatnaam, straatnaam_verkort, 
 CREATE INDEX BAG_POSTCODES_SPIDX on BAG_POSTCODES   USING GIST (GEOMETRIE_RD) ; 
 
 
+create materialized view BAG_OPENBARERUIMTES 
+as 
+select 
+openbareruimte_id as identificatie, 
+openbareruimte_id, 
+openbareruimtetype, 
+straatnaam, 
+straatnaam_verkort, 
+woonplaatscode, 
+woonplaatsnaam, 
+gemeentecode, 
+gemeentenaam, 
+provincienaam, 
+provinciecode, 
+provincieafkorting, 
+straatnaam || ', '  || woonplaatsnaam     as weergavenaam,
+'openbareruimte'::varchar(8) as type,
+'BAG'::varchar as bron,
+st_centroid(st_collect(geometrie_rd)) geometrie_rd 
+from locatieserver.bag_mv_adres 
+group by openbareruimte_id, 
+openbareruimtetype, 
+straatnaam, 
+straatnaam_verkort, 
+woonplaatsnaam, 
+woonplaatscode, 
+gemeentenaam, 
+gemeentecode, 
+provincienaam, 
+provinciecode, 
+provincieafkorting;
+
+CREATE INDEX BAG_OPENBARERUIMTES_SPIDX on BAG_OPENBARERUIMTES   USING GIST (GEOMETRIE_RD) ; 
+
 
 -- privileges
-grant select on bag_adressen       to pdok_locatieserver_owner;
-grant select on bag_gemeenten      to pdok_locatieserver_owner;
-grant select on bag_woonplaatsen   to pdok_locatieserver_owner;
-grant select on bag_panden         to pdok_locatieserver_owner;
-grant select on bag_pand_bij_adres to pdok_locatieserver_owner;
-grant select on bag_postcodes      to pdok_locatieserver_owner;
+grant select on bag_adressen        to pdok_locatieserver_owner;
+grant select on bag_gemeenten       to pdok_locatieserver_owner;
+grant select on bag_woonplaatsen    to pdok_locatieserver_owner;
+grant select on bag_panden          to pdok_locatieserver_owner;
+grant select on bag_pand_bij_adres  to pdok_locatieserver_owner;
+grant select on bag_postcodes       to pdok_locatieserver_owner;
+grant select on bag_openbareruimtes to pdok_locatieserver_owner;
+
 

@@ -8,29 +8,29 @@ select provincienaam, geovlak from bag.provincie;
 -- gemeente
 truncate table gemeente;
 
-insert into gemeente
+/*insert into gemeente
 select gemeentecode as code,
           gemeentenaam,
           geovlak as geom 
    from bag.gemeente ;
+*/
 
---gba_t33?
+--gba_t33moet gevuld zijn met de meest recent T33
 --Vullen van de gemeente tabel op basis van T33 en BAG gegevens van woonplaatsen
-/*insert into gemeente 
+insert into gemeente 
 select bgw.gemeentecode, 
-(select gemeentenaam from gba_t33
+(select gemeentenaam from gba_t33 
 where gemeentecode=bgw.gemeentecode and datumeinde is null 
 and (datumingang<to_char(now(), 'yyyymmdd') 
 or datumingang is null)) ,
-ST_Multi(ST_Union(bw.geovlak)) as geom
---sdo_aggr_union(sdoaggrtype(bw.geovlak, 0.5)) geom
-from bag_gemeente_woonplaats bgw join bag_wpl_actueelbestaand bw on (bgw.woonplaatscode=bw.identificatie)
-where bgw.begindatumtijdvakgeldigheid < now()
-and (bgw.einddatumtijdvakgeldigheid is null
-or bgw.einddatumtijdvakgeldigheid  > now())
-and bgw.status = 'definitief' 
-group by gemeentecode
-*/
+ST_Multi(ST_Union(bw.geovlak)) as geom 
+from bag_gemeente_woonplaats bgw join bag_wpl_actueelbestaand bw on (bgw.woonplaatscode=bw.identificatie)  
+where bgw.begindatumtijdvakgeldigheid < now() 
+and (bgw.einddatumtijdvakgeldigheid is null 
+or bgw.einddatumtijdvakgeldigheid  > now()) 
+and bgw.status = 'definitief'  
+group by gemeentecode;
+
 
 --overige bag objecten
 truncate table bag_gemeente_woonplaats;
@@ -292,6 +292,7 @@ select 'vown' adresobjecttype,
 
 
 -- 4e
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'v wn' adresobjecttype,
  'nevenadres verblijfsobject buiten woonplaats' adresobjecttypeomschrijving,
@@ -333,6 +334,7 @@ select 'v wn' adresobjecttype,
 
 
 -- 5e
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'lowh' adresobjecttype,
  'hoofdadres ligplaats in woonplaats' adresobjecttypeomschrijving,
@@ -373,6 +375,7 @@ select 'lowh' adresobjecttype,
 
 
 -- 6e l wh
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'l wh' adresobjecttype,
  'hoofdadres ligplaats buiten woonplaats' adresobjecttypeomschrijving,
@@ -413,6 +416,7 @@ select 'l wh' adresobjecttype,
 
 
 --7e lown
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'lown' adresobjecttype,
  'nevenadres ligplaats in woonplaats' adresobjecttypeomschrijving,
@@ -454,6 +458,7 @@ select 'lown' adresobjecttype,
 
 
 --8e l wn
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'l wn' adresobjecttype,
  'nevenadres ligplaats buiten woonplaats' adresobjecttypeomschrijving,
@@ -495,6 +500,7 @@ select 'l wn' adresobjecttype,
 
 
 --9e sowh
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'sowh' adresobjecttype,
  'hoofdadres standplaats in woonplaats' adresobjecttypeomschrijving,
@@ -535,6 +541,7 @@ select 'sowh' adresobjecttype,
 
 
 --10e 
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 's wh' adresobjecttype,
  'hoofdadres standplaats buiten woonplaats' adresobjecttypeomschrijving,
@@ -575,6 +582,7 @@ where a.typeadresseerbaarobject = 'Standplaats' and a.gerelateerdewoonplaats is 
 
 
 --11e sown
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 'sown' adresobjecttype,
  'nevenadres standplaats in woonplaats' adresobjecttypeomschrijving,
@@ -616,6 +624,7 @@ where a.typeadresseerbaarobject = 'Standplaats' and a.gerelateerdewoonplaats is 
 
 
 --12e 
+
 insert /*+ APPEND */ into BAG_ADRES 
 select 's wn' adresobjecttype,
  'nevenadres standplaats buiten woonplaats' adresobjecttypeomschrijving,
@@ -656,6 +665,7 @@ select 's wn' adresobjecttype,
 ;
 
 
+commit;
 
 
 
@@ -665,6 +675,7 @@ REFRESH MATERIALIZED VIEW BAG_MV_ADRES;
 
 REFRESH MATERIALIZED VIEW BAG_POSTCODES;
 
+REFRESH MATERIALIZED VIEW BAG_OPENBARERUIMTES;
 
 
 
