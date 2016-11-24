@@ -3,7 +3,7 @@ set search_path to locatieserver, public;
 truncate table provincie;
 
 insert into provincie
-select provincienaam, geovlak from bag.provincie;
+select provincienaam, geom from bestuurlijkegrenzen.provincies_sf;
 
 -- gemeente
 truncate table gemeente;
@@ -15,7 +15,7 @@ select gemeentecode as code,
    from bag.gemeente ;
 */
 
---gba_t33moet gevuld zijn met de meest recent T33
+--gba_t33moet gevuld zijn met de meest recente T33
 --Vullen van de gemeente tabel op basis van T33 en BAG gegevens van woonplaatsen
 insert into gemeente 
 select bgw.gemeentecode, 
@@ -42,6 +42,7 @@ insert into bag_gemeente_woonplaats select  gid,
  cast(cast(status as varchar(100)) as gemeentewoonplaatsstatus) from bag.gemeente_woonplaats;
 
 truncate table bag_verblijfsobject;
+
 insert into bag_verblijfsobject select * from bag.verblijfsobject;
 
 truncate table bag_woonplaats;

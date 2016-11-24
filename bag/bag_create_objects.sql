@@ -1740,7 +1740,7 @@ straatnaam || ', '  || woonplaatsnaam     as weergavenaam,
 'openbareruimte'::varchar(8) as type,
 'BAG'::varchar as bron,
 st_centroid(st_collect(geometrie_rd)) geometrie_rd 
-from locatieserver.bag_mv_adres 
+from bag_mv_adres 
 group by openbareruimte_id, 
 openbareruimtetype, 
 straatnaam, 
